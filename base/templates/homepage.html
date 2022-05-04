@@ -2,10 +2,18 @@
 
 
 {% block content %}
-
-
+    <a href="{% url 'create_product' %}">create post to sell your item
+</a>
     {% for product in products %}
-        <a href="{% url 'product' product.id %}"><h1>Selling - {{ product.name }}</h1></a>
+        <div style="border-bottom: 2px solid blue;width: 40%;margin: 20px">
+            <p style="display: flex;justify-content: center">post created - {{ product.created }}</p>
+            <a href="{% url 'update_product' %}">Edit</a>
+            <a href="{% url 'product' product.id %}" style="display: flex;justify-content: left">
+
+                <h1>@{{ product.host }} is selling - {{ product.name }}</h1></a>
+            <h3>category:{{ product.category.name }}</h3>
+        </div>
+
     {% endfor %}
 
 

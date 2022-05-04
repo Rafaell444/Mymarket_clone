@@ -15,3 +15,10 @@
 
 
 <hr>
+
+<div style="display: flex;">
+    {% for cat in category %}
+        <div style="padding: 10px;border: green solid 2px;margin-left: 10px"><a href="">{{ cat.name }}</a></div>
+    {% endfor %}
+
+</div>
