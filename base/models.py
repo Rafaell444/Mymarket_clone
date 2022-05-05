@@ -20,8 +20,14 @@ class Product(models.Model):
     phoneNumber = models.CharField(max_length=9, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
 
+    def validate(self, data):
+        data['created'] = data['created'].replace(second=0, microsecond=0)
+        data['updated'] = data['updated'].replace(second=0, microsecond=0)
+
+        return data
+
     class Meta:
-        ordering = ["updated", "created"]
+        ordering = ["-created", "-updated"]
 
     def __str__(self):
         return self.name

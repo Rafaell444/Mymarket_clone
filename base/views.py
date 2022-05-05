@@ -42,6 +42,14 @@ def createproduct(request):
 
 def updateproduct(request, pk):
     product = Product.objects.get(id=pk)
-    print(product)
+    form = ProductForm(instance=product)
 
-    return render(request,"product_form.html")
+    if request.method == "POST":
+        form = ProductForm(request.POST,instance=product)
+        if form.is_valid():
+            form.save()
+            return redirect("home")
+
+    context = {"form": form}
+
+    return render(request, "product_form.html",context)

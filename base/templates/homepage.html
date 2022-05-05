@@ -6,8 +6,17 @@
 </a>
     {% for product in products %}
         <div style="border-bottom: 2px solid blue;width: 40%;margin: 20px">
-            <p style="display: flex;justify-content: center">post created - {{ product.created }}</p>
-            <a href="{% url 'update_product' %}">Edit</a>
+            <p style="display: flex;justify-content: center">
+
+                {% if product.created == product.updated %}
+                    created - {{ product.created }}
+                {% else %}
+                    created - {{ product.created }} and also updated - {{ product.updated }}
+                {% endif %}
+
+
+            </p>
+            <a href="{% url 'update_product' product.id %}">Edit</a>
             <a href="{% url 'product' product.id %}" style="display: flex;justify-content: left">
 
                 <h1>@{{ product.host }} is selling - {{ product.name }}</h1></a>
