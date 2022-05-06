@@ -17,8 +17,10 @@
 <hr>
 
 <div style="display: flex;">
+    <a href="{% url 'home' %}" style="padding: 10px;border: green solid 2px;margin-left: 10px">All</a>
     {% for cat in category %}
-        <div style="padding: 10px;border: green solid 2px;margin-left: 10px"><a href="">{{ cat.name }}</a></div>
+
+        <div style="padding: 10px;border: green solid 2px;margin-left: 10px"><a href="{% url 'home' %}?q={{ cat }}">{{ cat.name }}</a></div>
     {% endfor %}
 
 </div>

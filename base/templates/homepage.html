@@ -2,7 +2,8 @@
 
 
 {% block content %}
-    <a href="{% url 'create_product' %}">create post to sell your item
+    <div style="margin-top: 20px;border: 2px solid red"><a href="{% url 'create_product' %}" style="padding: 20px;">create post</a></div>
+
 </a>
     {% for product in products %}
         <div style="border-bottom: 2px solid blue;width: 40%;margin: 20px">
@@ -11,13 +12,15 @@
                 {% if product.created == product.updated %}
                     created - {{ product.created }}
                 {% else %}
-                    created - {{ product.created }} and also updated - {{ product.updated }}
+                    created - {{ product.created}} and also updated - {{ product.updated }}
                 {% endif %}
 
 
             </p>
             <a href="{% url 'update_product' product.id %}">Edit</a>
+
             <a href="{% url 'product' product.id %}" style="display: flex;justify-content: left">
+            <a href="{% url 'delete_product' product.id %}">Remove</a>
 
                 <h1>@{{ product.host }} is selling - {{ product.name }}</h1></a>
             <h3>category:{{ product.category.name }}</h3>
