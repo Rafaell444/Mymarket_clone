@@ -1,7 +1,13 @@
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.db.models import Q
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, redirect
 from .models import Product, Category
 from .forms import ProductForm
+from django.contrib import messages
+from django.contrib.auth.forms import UserCreationForm
+from django.http import HttpResponse
 
 
 # Create your views here.
@@ -14,13 +20,58 @@ from .forms import ProductForm
 # ]
 
 
+def loginPage(request):
+    page = "login"
+
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+
+        try:
+            user = User.objects.get(username=username)
+        except:
+            messages.error(request, "User does not exist")
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, "Username or Password does not exist")
+
+    context = {"page": page}
+    return render(request, "login_registration.html", context)
+
+
+def logoutPage(request):
+    logout(request)
+    return redirect("home")
+
+
+def registerPage(request):
+    page = "register"
+    form = UserCreationForm()
+
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.username = user.username.lower()
+            user.save()
+            login(request, user)
+
+            return redirect("home")
+    context = {"form": form, "page": page}
+    return render(request, "login_registration.html", context)
+
+
 def home(request):
     q = request.GET.get("q") if request.GET.get('q') is not None else ""
 
     products = Product.objects.filter(
         Q(category__name__icontains=q) |
-        Q(name__icontains=q) |
-        Q(description__icontains=q)
+        Q(name__icontains=q)
     )
     category = Category.objects.all()
 
@@ -39,36 +90,49 @@ def product(request, pk):
     return render(request, "product.html", context)
 
 
+@login_required(login_url='/login')
 def createproduct(request):
     form = ProductForm()
 
     if request.method == "POST":
         form = ProductForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = request.user
+            prod = form.save(commit=False)
+            prod.host = user
+            prod.save()
             return redirect("home")
 
     context = {"form": form}
     return render(request, "product_form.html", context)
 
 
+@login_required(login_url='/login')
 def updateproduct(request, pk):
     product = Product.objects.get(id=pk)
     form = ProductForm(instance=product)
 
-    if request.method == "POST":
-        form = ProductForm(request.POST, instance=product)
-        if form.is_valid():
-            form.save()
-            return redirect("home")
+    if request.user != product.host:
+        return HttpResponse("you are not allowed here!")
+    else:
 
-    context = {"form": form}
+        if request.method == "POST":
+            form = ProductForm(request.POST, instance=product)
+            if form.is_valid():
+                form.save()
+                return redirect("home")
+
+        context = {"form": form}
 
     return render(request, "product_form.html", context)
 
 
+@login_required(login_url='/login')
 def deleteproduct(request, pk):
     product = Product.objects.get(id=pk)
+
+    if request.user != product.host:
+        return HttpResponse("you are not allowed here !")
 
     if request.method == "POST":
         product.delete()

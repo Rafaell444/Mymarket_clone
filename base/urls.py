@@ -4,11 +4,15 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.home, name="home"),
-    path('product/<str:pk>/', views.product, name="product"),
+                  path("login/", views.loginPage, name="login"),
+                  path("logout/", views.logoutPage, name="logout"),
+                  path("register/", views.registerPage, name="register"),
 
-    path('create_product/', views.createproduct, name="create_product"),
-    path('update_product/<str:pk>/', views.updateproduct, name="update_product"),
-    path('delete_product/<str:pk>/', views.deleteproduct, name="delete_product")
+                  path('', views.home, name="home"),
+                  path('product/<str:pk>/', views.product, name="product"),
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+                  path('create_product/', views.createproduct, name="create_product"),
+                  path('update_product/<str:pk>/', views.updateproduct, name="update_product"),
+                  path('delete_product/<str:pk>/', views.deleteproduct, name="delete_product")
+
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
