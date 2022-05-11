@@ -10,14 +10,18 @@ from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
 
 
-# Create your views here.
+def profilepage(request, pk):
+    product = Product.objects.get(id=pk)
+    products = Product.objects.all()
 
-# products = [
-#     {"id": 1, "name": "piano"},
-#     {"id": 2, "name": "guitar"},
-#     {"id": 3, "name": "puppy"},
-#
-# ]
+    count = 0
+
+    for post in products:
+        if post.host == product.host:
+            count += 1
+
+    context = {"product": product, "products": products, "length": count}
+    return render(request, "profile.html", context)
 
 
 def loginPage(request):

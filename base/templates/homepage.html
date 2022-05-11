@@ -28,7 +28,7 @@
                 <a href="{% url 'product' product.id %}" style="display: flex;justify-content: left"></a>
                 <a href="{% url 'delete_product' product.id %}">Remove</a>
             {% endif %}
-            <a href="{% url 'product' product.id %}"><h1>@{{ product.host }} is selling - {{ product.name }}</h1></a>
+            <h1><a href="{% url 'profile' product.id %}">@{{ product.host }}</a> is selling - </h1><a href="{% url 'product' product.id %}"><h1>{{ product.name }}</h1></a>
             <h3>category:{{ product.category.name }}</h3>
         </div>
 

@@ -1,0 +1,21 @@
+{% extends "main.html" %}
+
+
+
+{#<img src="" alt="">#}
+{% block content %}
+
+    <h4>Profile Name : {{ product.host }}</h4>
+
+    <p>phone number : {{ product.phoneNumber }}</p>
+    <hr>
+    <div style="display: flex;justify-content: center"><h1>{{ length }} Post By {{ product.host }}</h1></div>
+    <hr>
+
+    {% for post in products %}
+        {% if post.host == product.host %}
+            <a href="{% url 'product' post.id %}"><div style="border: 2px red solid;padding: 20px;margin-bottom: 10px"><p>{{ post }}</p></div></a>
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}
